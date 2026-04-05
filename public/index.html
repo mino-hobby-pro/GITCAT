@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GITCAT | Miracle Neon Proxy</title>
+    <title>GITCAT | Muted Neon Proxy</title>
     
     <script src="/uv/uv.bundle.js"></script>
     <script src="/uv/uv.config.js"></script>
@@ -18,20 +18,20 @@
     </script>
     
     <style>
-        /* GITCAT ULTIMATE MIRACLE NEON DESIGN
-           Theme: Vivid Cyber Neon (鮮烈でサイバーなネオン虹色)
+        /* GITCAT ULTIMATE MUTED NEON DESIGN
+           Theme: Muted Modern Rainbow + Cinematic Noise
         */
         :root {
-            --bg-dark: #050507; /* より深い漆黒 */
-            --header-bg: #0f0f12;
-            --tab-active: #16161a;
+            --bg-dark: #0a0a0c; 
+            --header-bg: #111114;
+            --tab-active: #18181c;
             --tab-hover: #1e1e24;
-            --text-primary: #ffffff;
-            --text-secondary: #888899;
-            --input-bg: #121215;
-            --border: rgba(255, 255, 255, 0.05);
-            /* ミラクルでかっこいい鮮烈なネオン虹色 */
-            --neon-rainbow: linear-gradient(90deg, #ff0055, #ff00ff, #0055ff, #00ffff, #00ff55, #ffff00, #ff0055);
+            --text-primary: #e4e4e7;
+            --text-secondary: #71717a;
+            --input-bg: #141418;
+            --border: rgba(255, 255, 255, 0.04);
+            /* 落ち着いた、深みのあるモダンな虹色 */
+            --neon-rainbow: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #f43f5e, #eab308, #14b8a6, #6366f1);
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
@@ -46,6 +46,28 @@
             background-color: var(--bg-dark);
             color: var(--text-primary);
             overflow: hidden;
+            position: relative;
+        }
+
+        /* --- フィルムノイズ・エフェクト --- */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.035; /* うっすらとしたノイズ */
+            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+            animation: noiseAnim 0.15s infinite;
+        }
+
+        @keyframes noiseAnim {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(1px, -1px); }
+            60% { transform: translate(-1px, -1px); }
+            80% { transform: translate(1px, 1px); }
+            100% { transform: translate(0, 0); }
         }
 
         /* 虹色エネルギーの流動アニメーション */
@@ -60,6 +82,8 @@
             flex-direction: column;
             height: 100vh;
             width: 100vw;
+            position: relative;
+            z-index: 1;
         }
 
         /* --- タブバー構造 --- */
@@ -87,12 +111,13 @@
             min-width: 160px;
             max-width: 240px;
             padding: 0 15px;
-            border-radius: 12px 12px 0 0;
+            border-radius: 10px 10px 0 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
             transition: all 0.2s ease;
             position: relative;
         }
@@ -102,7 +127,7 @@
             color: var(--text-primary);
         }
 
-        /* アクティブタブの強烈なネオンライン */
+        /* アクティブタブの上部に落ち着いたネオンライン */
         .tab.active::before {
             content: '';
             position: absolute;
@@ -110,9 +135,9 @@
             width: 100%; height: 2px;
             background: var(--neon-rainbow);
             background-size: 300% 300%;
-            animation: rainbowFlow 4s linear infinite;
-            border-radius: 12px 12px 0 0;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            animation: rainbowFlow 6s ease-in-out infinite;
+            border-radius: 10px 10px 0 0;
+            opacity: 0.8;
         }
 
         .tab:hover:not(.active) { background-color: var(--tab-hover); }
@@ -136,16 +161,15 @@
             transition: 0.2s;
         }
         .tab-close:hover {
-            background-color: rgba(255, 255, 255, 0.15);
-            color: #ff0055;
-            box-shadow: 0 0 8px rgba(255, 0, 85, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #f43f5e;
         }
 
         .new-tab-btn {
             background: none;
             border: none;
             color: var(--text-primary);
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             width: 36px;
             height: 36px;
@@ -155,118 +179,109 @@
             border-radius: 50%;
             margin-bottom: 2px;
             transition: 0.2s;
+            opacity: 0.7;
         }
         .new-tab-btn:hover { 
             background-color: var(--tab-hover);
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
+            opacity: 1;
         }
 
         /* --- ナビゲーションバー --- */
         .nav-bar {
             background-color: var(--tab-active);
-            height: 48px;
+            height: 44px;
             display: flex;
             align-items: center;
             padding: 0 15px;
-            gap: 15px;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
         }
 
         .nav-icon {
             cursor: pointer;
             color: var(--text-secondary);
             transition: 0.2s;
-            font-size: 18px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             user-select: none;
         }
         .nav-icon:hover { 
             color: var(--text-primary);
-            background-color: rgba(255,255,255,0.1);
+            background-color: rgba(255,255,255,0.05);
         }
 
         .address-bar-wrapper {
             flex-grow: 1;
             background-color: var(--input-bg);
-            height: 32px;
-            border-radius: 16px;
+            height: 28px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             padding: 0 15px;
             position: relative;
             transition: 0.3s;
+            border: 1px solid var(--border);
         }
-        /* フォーカス時のアドレスバー発光 */
-        .address-bar-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -1px; left: -1px; right: -1px; bottom: -1px;
-            background: var(--neon-rainbow);
-            background-size: 300% 300%;
-            border-radius: 17px;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
-            animation: rainbowFlow 3s linear infinite;
+        
+        .address-bar-wrapper:focus-within { 
+            background-color: #050505; 
+            border-color: rgba(168, 85, 247, 0.3); /* フォーカス時に少し紫がかる */
         }
-        .address-bar-wrapper:focus-within::before { opacity: 1; }
-        .address-bar-wrapper:focus-within { background-color: #000; }
 
         #urlInput {
             background: none;
             border: none;
             color: var(--text-primary);
             width: 100%;
-            font-size: 14px;
+            font-size: 13px;
             margin-left: 10px;
+            letter-spacing: 0.3px;
         }
 
         /* --- ケバブメニュー --- */
         .menu-container { position: relative; }
         .dropdown-menu {
             position: absolute;
-            top: 40px; right: 0;
-            background-color: #0f0f12;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 0 15px rgba(0, 255, 255, 0.1);
-            width: 240px;
+            top: 36px; right: 0;
+            background-color: #111114;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 220px;
             display: none;
             flex-direction: column;
             z-index: 1000;
-            padding: 5px 0;
+            padding: 6px 0;
             animation: fadeIn 0.2s ease;
         }
         .dropdown-menu.show { display: flex; }
 
         .menu-item {
-            padding: 12px 20px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-primary);
             transition: 0.2s;
             position: relative;
-            z-index: 1;
         }
         .menu-item:hover { background-color: #1a1a20; }
         .menu-item:hover::after {
             content: '';
             position: absolute;
-            left: 0; top: 0; width: 3px; height: 100%;
+            left: 0; top: 0; width: 2px; height: 100%;
             background: var(--neon-rainbow);
             background-size: 300% 300%;
-            animation: rainbowFlow 2s linear infinite;
-            box-shadow: 0 0 10px rgba(255,0,255,0.8);
+            animation: rainbowFlow 4s linear infinite;
         }
 
         /* --- ローディングバー --- */
         .loader-container {
-            height: 2px; width: 100%;
+            height: 1px; width: 100%;
             background: transparent;
             position: relative;
             z-index: 50;
@@ -275,8 +290,8 @@
             height: 100%; width: 0%;
             background: var(--neon-rainbow);
             background-size: 300% 300%;
-            animation: rainbowFlow 1.5s linear infinite;
-            box-shadow: 0 0 15px 2px rgba(255, 255, 255, 0.4);
+            animation: rainbowFlow 2s linear infinite;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
             transition: width 0.3s ease;
         }
 
@@ -312,58 +327,47 @@
             opacity: 0; visibility: hidden; pointer-events: none;
         }
 
-        /* 究極のミラクル・ネオンロゴ */
+        /* 落ち着いたモダンロゴ */
         .home-logo {
-            font-size: 90px;
-            font-weight: 900;
-            letter-spacing: -3px;
+            font-size: 72px;
+            font-weight: 800;
+            letter-spacing: -2px;
             margin-bottom: 40px;
             background: var(--neon-rainbow);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: rainbowFlow 4s linear infinite, fadeInUp 0.8s ease;
-            filter: drop-shadow(0 0 20px rgba(255, 0, 127, 0.4)) drop-shadow(0 0 40px rgba(0, 255, 255, 0.2));
+            animation: rainbowFlow 8s ease infinite, fadeInUp 0.8s ease;
+            opacity: 0.9;
         }
 
-        /* ホーム検索バーのネオンエフェクト */
         .home-search-wrapper {
             width: 100%;
-            max-width: 580px;
+            max-width: 540px;
             position: relative;
             animation: fadeInUp 0.8s ease;
-            border-radius: 26px;
+            border-radius: 20px;
+            padding: 1px; /* ボーダーグラデーション用 */
+            background: rgba(255,255,255,0.05);
+            transition: 0.3s;
         }
-        .home-search-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
+        .home-search-wrapper:focus-within {
             background: var(--neon-rainbow);
             background-size: 300% 300%;
-            border-radius: 26px;
-            z-index: -1;
-            opacity: 0;
-            transition: 0.3s;
-            animation: rainbowFlow 3s linear infinite;
-        }
-        .home-search-wrapper:focus-within::before {
-            opacity: 1;
-            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4), 0 0 25px rgba(0, 255, 255, 0.4);
+            animation: rainbowFlow 5s linear infinite;
         }
 
         .home-search-input {
             width: 100%;
             background-color: #121215;
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 16px 25px 16px 50px;
-            font-size: 16px;
+            border: none;
+            border-radius: 19px;
+            padding: 14px 25px 14px 45px;
+            font-size: 15px;
             color: white;
-            transition: 0.3s;
         }
         .home-search-wrapper:focus-within .home-search-input {
-            background-color: #000;
-            border-color: transparent;
+            background-color: #08080a;
         }
 
         .search-icon-home {
@@ -371,14 +375,15 @@
             left: 18px; top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
-            font-size: 20px;
+            font-size: 16px;
+            z-index: 2;
         }
 
-        /* --- ショートカット群 (新規追加) --- */
+        /* --- ショートカット群 --- */
         .home-shortcuts {
             display: flex;
-            gap: 30px;
-            margin-top: 45px;
+            gap: 25px;
+            margin-top: 40px;
             animation: fadeInUp 1s ease;
         }
         .shortcut-item {
@@ -387,68 +392,53 @@
             align-items: center;
             cursor: pointer;
             transition: 0.3s;
-            width: 80px;
+            width: 70px;
         }
         .shortcut-icon {
-            width: 56px; height: 56px;
-            border-radius: 50%;
-            background-color: #1a1a1f;
+            width: 48px; height: 48px;
+            border-radius: 14px;
+            background-color: #16161a;
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             position: relative;
             color: var(--text-primary);
             transition: 0.3s;
-            z-index: 1;
         }
-        /* ホバー時のショートカットミラクル発光 */
         .shortcut-item:hover .shortcut-icon {
-            background-color: #000;
-            transform: translateY(-5px);
-            color: #fff;
-        }
-        .shortcut-icon::before {
-            content: '';
-            position: absolute;
-            top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: var(--neon-rainbow);
-            background-size: 300% 300%;
-            border-radius: 50%;
-            z-index: -1;
-            opacity: 0;
-            transition: 0.3s;
-            animation: rainbowFlow 3s linear infinite;
-        }
-        .shortcut-item:hover .shortcut-icon::before {
-            opacity: 1;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 20px rgba(255, 0, 127, 0.6);
+            background-color: #1e1e24;
+            transform: translateY(-3px);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
         .shortcut-label {
-            font-size: 13px;
+            font-size: 11px;
             color: var(--text-secondary);
             font-weight: 500;
+            letter-spacing: 0.5px;
             transition: 0.3s;
         }
         .shortcut-item:hover .shortcut-label {
             color: var(--text-primary);
-            text-shadow: 0 0 8px rgba(255,255,255,0.8);
         }
-
-        /* SVGアイコンサイズ */
-        .shortcut-icon svg { width: 28px; height: 28px; }
+        .shortcut-icon svg { width: 22px; height: 22px; opacity: 0.8; }
+        .shortcut-item:hover .shortcut-icon svg { opacity: 1; }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
+
+<div class="noise-overlay"></div>
 
 <div class="browser-app">
     <header class="header">
@@ -460,7 +450,7 @@
         <div class="nav-icon" onclick="goHome()" title="ホーム">🏠</div>
         <div class="nav-icon" onclick="reloadTab()" title="再読み込み">↻</div>
         <div class="address-bar-wrapper">
-            <span style="color:var(--text-secondary); font-size: 14px; margin-right: 5px;">⚡</span>
+            <span style="color:var(--text-secondary); font-size: 12px; margin-right: 5px;">⚡</span>
             <input type="text" id="urlInput" placeholder="URLを入力するか、検索">
         </div>
         
@@ -504,7 +494,7 @@
                     <div class="shortcut-label">GAMES</div>
                 </div>
                 
-                <div class="shortcut-item" onclick="openInternalPage('gitcat://public-url', '/url', 'URL-List')">
+                <div class="shortcut-item" onclick="openInternalPage('gitcat://public-url', '/public-url.html', 'URL-List')">
                     <div class="shortcut-icon">
                         <svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
                     </div>
@@ -516,10 +506,52 @@
         </main>
 </div>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getDatabase, ref, get, set, child } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPkgzCIOP3-ln0eX6043s2G3tyZu4uj18",
+    authDomain: "message-site-d283b.firebaseapp.com",
+    databaseURL: "https://message-site-d283b-default-rtdb.firebaseio.com",
+    projectId: "message-site-d283b",
+    storageBucket: "message-site-d283b.firebasestorage.app",
+    messagingSenderId: "58182307350",
+    appId: "1:58182307350:web:34a295f442ed2ce4ffaf37",
+    measurementId: "G-BGT7PTEVK2"
+  };
+
+  try {
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // 現在のドメインURLを取得
+      const currentUrl = window.location.origin;
+      
+      // DBのキーに使えるようにBase64エンコードし、無効文字を置換
+      const safeKey = btoa(currentUrl).replace(/[=+/]/g, '_');
+      const dbRef = ref(db);
+
+      // FirebaseにURLが登録されているか確認し、無ければ保存
+      get(child(dbRef, `public_domains/${safeKey}`)).then((snapshot) => {
+        if (!snapshot.exists()) {
+          set(ref(db, `public_domains/${safeKey}`), {
+            url: currentUrl,
+            timestamp: Date.now()
+          }).then(() => {
+              console.log("Domain registered to Public List.");
+          });
+        }
+      }).catch((error) => {
+        console.error("Firebase Read Error:", error);
+      });
+  } catch(e) {
+      console.error("Firebase Init Error:", e);
+  }
+</script>
+
 <script>
-    /* GITCAT BROWSER CORE LOGIC
-       UVプロキシ処理と内部ページルーティング
-    */
+    /* GITCAT BROWSER CORE LOGIC (UV完全維持) */
     let tabs = [];
     let activeTabId = null;
     let tabCount = 0;
@@ -533,7 +565,6 @@
 
     window.onload = () => { createNewTab(); };
 
-    // --- タブ管理 ---
     function createNewTab() {
         tabCount++;
         const id = `tab-${tabCount}`;
@@ -557,7 +588,6 @@
 
         iframe.onload = () => {
             finishLoading();
-            // 内部ページ以外の場合にタイトル取得を試みる
             if (iframe.src && iframe.src !== "about:blank" && !iframe.src.startsWith(window.location.origin)) {
                 try {
                     const title = iframe.contentWindow.document.title;
@@ -614,7 +644,6 @@
         }
     }
 
-    // --- 新規追加: 内部ページルーティング (gitcat:// 系) ---
     function openInternalPage(displayUrl, iframePath, title) {
         const currentFrame = document.getElementById(`frame-${activeTabId}`);
         const currentTab = tabs.find(t => t.id === activeTabId);
@@ -627,21 +656,19 @@
         
         homeScreen.classList.add('hidden');
         urlInput.value = displayUrl;
-        currentFrame.src = iframePath; // 指定されたパスをiframeに埋め込む
+        currentFrame.src = iframePath; 
         
         updateTabTitle(activeTabId, title);
         closeMenu();
     }
 
-    // --- プロキシ ナビゲーション処理 (UVロジック完全維持) ---
     function processNavigation(inputUrl) {
         let url = inputUrl.trim();
         if (!url) return;
 
-        // ユーザーが手入力で内部URLを叩いた場合のインターセプト
         if (url === "gitcat://labo5") return openInternalPage(url, "/labo5", "Labo5");
         if (url === "gitcat://games") return openInternalPage(url, "/games", "GAMES");
-        if (url === "gitcat://public-url") return openInternalPage(url, "/url", "URL-List");
+        if (url === "gitcat://public-url") return openInternalPage(url, "/public-url", "URL-List");
         if (url === "gitcat://settings") return openInternalPage(url, "/setting", "設定");
 
         startLoading();
@@ -655,7 +682,6 @@
             }
         }
 
-        // UV Configによるエンコード処理
         const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
         const currentFrame = document.getElementById(`frame-${activeTabId}`);
         const currentTab = tabs.find(t => t.id === activeTabId);
@@ -668,7 +694,6 @@
         currentFrame.src = encodedUrl;
     }
 
-    // --- メニュー機能実装 ---
     function toggleMenu(event) {
         event.stopPropagation();
         document.getElementById('kebabMenu').classList.toggle('show');
@@ -685,7 +710,6 @@
 
     function openInAboutBlank() {
         const currentFrame = document.getElementById(`frame-${activeTabId}`);
-        // 内部ページや空の場合は弾く
         if (!currentFrame || !currentFrame.src || currentFrame.src === "about:blank" || currentFrame.src.startsWith(window.location.origin)) {
             alert("外部ウェブサイトを開いてから実行してください。");
             closeMenu();
@@ -714,7 +738,6 @@
         window.location.href = 'https://www.google.com';
     }
 
-    // --- UI コントロール ---
     function startLoading() {
         loaderFill.style.transition = "width 0.4s ease";
         loaderFill.style.width = "40%";
@@ -750,7 +773,6 @@
         homeScreen.classList.remove('hidden');
     }
 
-    // --- イベントリスナー ---
     document.getElementById('addTabBtn').onclick = createNewTab;
 
     urlInput.addEventListener("keydown", (e) => {
