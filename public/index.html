@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GITCAT | Incognito Proxy</title>
+    <title>GITCAT | Neon Proxy</title>
     
     <script src="/uv/uv.bundle.js"></script>
     <script src="/uv/uv.config.js"></script>
@@ -18,21 +18,20 @@
     </script>
     
     <style>
-        /* GITCAT ULTIMATE DESIGN SYSTEM 
-           Theme: Deep Incognito Modern
+        /* GITCAT ULTIMATE NEON DESIGN SYSTEM 
+           Theme: Muted Modern Rainbow (派手すぎないネオン虹色)
         */
         :root {
-            --bg-dark: #0f0f0f; /* より深い黒 */
-            --header-bg: #1a1a1a;
-            --tab-active: #282828;
-            --tab-hover: #333333;
-            --accent: #3ea6ff; /* シークレットモードのブルーアクセント */
-            --text-primary: #f1f1f1;
-            --text-secondary: #aaaaaa;
-            --input-bg: #222222;
-            --border: rgba(255, 255, 255, 0.1);
-            --glass: rgba(255, 255, 255, 0.05);
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            --bg-dark: #09090b;
+            --header-bg: #141415;
+            --tab-active: #202022;
+            --tab-hover: #27272a;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --input-bg: #18181b;
+            --border: rgba(255, 255, 255, 0.08);
+            /* 淡く美しいネオン虹色のグラデーション */
+            --neon-rainbow: linear-gradient(90deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb, #e0c3fc, #ff9a9e);
             --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
@@ -47,6 +46,13 @@
             background-color: var(--bg-dark);
             color: var(--text-primary);
             overflow: hidden;
+        }
+
+        /* 虹色アニメーションのキーフレーム */
+        @keyframes rainbowGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .browser-app {
@@ -97,7 +103,20 @@
             background-color: var(--tab-active);
             color: var(--text-primary);
             border-color: var(--border);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* アクティブタブの上部にネオンのラインを入れる */
+        .tab.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--neon-rainbow);
+            background-size: 300% 300%;
+            animation: rainbowGlow 6s ease infinite;
+            border-radius: 12px 12px 0 0;
         }
 
         .tab:hover:not(.active) {
@@ -125,6 +144,7 @@
 
         .tab-close:hover {
             background-color: rgba(255, 255, 255, 0.15);
+            color: #ff758c; /* 閉じるときは少し赤みを帯びる */
         }
 
         .new-tab-btn {
@@ -158,11 +178,21 @@
 
         .nav-icon {
             cursor: pointer;
-            opacity: 0.7;
+            color: var(--text-secondary);
             transition: 0.2s;
             font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            user-select: none;
         }
-        .nav-icon:hover { opacity: 1; transform: scale(1.1); }
+        .nav-icon:hover { 
+            color: var(--text-primary);
+            background-color: rgba(255,255,255,0.1);
+        }
 
         .address-bar-wrapper {
             flex-grow: 1;
@@ -177,9 +207,9 @@
         }
 
         .address-bar-wrapper:focus-within {
-            border-color: var(--accent);
             background-color: #000;
-            box-shadow: 0 0 0 2px rgba(62, 166, 255, 0.2);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 0 10px rgba(161, 196, 253, 0.15);
         }
 
         #urlInput {
@@ -189,6 +219,53 @@
             width: 100%;
             font-size: 14px;
             margin-left: 10px;
+        }
+
+        /* --- ケバブメニュー (右上の ⋮) --- */
+        .menu-container {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: var(--header-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            width: 220px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+            padding: 5px 0;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .dropdown-menu.show { display: flex; }
+
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: background 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* メニューホバー時に美しいネオンテキストに変わる */
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        .menu-item:hover::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 3px; height: 100%;
+            background: var(--neon-rainbow);
+            background-size: 300% 300%;
+            animation: rainbowGlow 4s ease infinite;
         }
 
         /* --- ローディングバー --- */
@@ -201,8 +278,10 @@
         .loader-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent), #8ab4f8);
-            box-shadow: 0 0 8px var(--accent);
+            background: var(--neon-rainbow);
+            background-size: 300% 300%;
+            animation: rainbowGlow 3s ease infinite;
+            box-shadow: 0 0 10px rgba(161, 196, 253, 0.4);
             transition: width 0.4s ease;
         }
 
@@ -218,12 +297,12 @@
             height: 100%;
             border: none;
             position: absolute;
-            background-color: white; /* サイト側は白背景が多いので */
+            background-color: white;
             display: none;
         }
         .iframe-window.active { display: block; }
 
-        /* --- ホームスクリーン（Googleスタイル） --- */
+        /* --- ホームスクリーン --- */
         .home-screen {
             position: absolute;
             top: 0;
@@ -245,16 +324,18 @@
             pointer-events: none;
         }
 
+        /* ネオン虹色のロゴ */
         .home-logo {
             font-size: 82px;
             font-weight: 900;
             letter-spacing: -2px;
             margin-bottom: 40px;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            background: var(--neon-rainbow);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 5px 15px rgba(62, 166, 255, 0.4));
-            animation: fadeInDown 0.8s ease;
+            animation: rainbowGlow 6s ease infinite, fadeInUp 0.8s ease;
+            filter: drop-shadow(0 0 15px rgba(161, 196, 253, 0.2));
         }
 
         .home-search-wrapper {
@@ -266,19 +347,19 @@
 
         .home-search-input {
             width: 100%;
-            background-color: #202124;
-            border: 1px solid #5f6368;
+            background-color: #1f1f22;
+            border: 1px solid var(--border);
             border-radius: 24px;
             padding: 14px 25px 14px 50px;
             font-size: 16px;
             color: white;
-            transition: 0.2s;
+            transition: 0.3s;
         }
 
         .home-search-input:hover, .home-search-input:focus {
-            background-color: #303134;
+            background-color: #27272a;
             border-color: transparent;
-            box-shadow: 0 1px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 0 0 2px rgba(161, 196, 253, 0.2);
         }
 
         .search-icon-home {
@@ -286,17 +367,17 @@
             left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #9aa0a6;
+            color: var(--text-secondary);
             font-size: 18px;
         }
 
         /* アニメーション */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -307,16 +388,27 @@
     <header class="header">
         <div class="tabs-container" id="tabsList">
             </div>
-        <button class="new-tab-btn" id="addTabBtn" title="新しいタブ">+</button>
+        <button class="new-tab-btn" id="addTabBtn" title="新しいタブを開く">+</button>
     </header>
 
     <div class="nav-bar">
         <div class="nav-icon" onclick="goHome()" title="ホーム">🏠</div>
         <div class="nav-icon" onclick="reloadTab()" title="再読み込み">↻</div>
         <div class="address-bar-wrapper">
-            <span style="color:var(--accent); font-size: 12px;">🔒</span>
-            <input type="text" id="urlInput" placeholder="URLを入力するか、Googleで検索">
+            <span style="color:var(--text-secondary); font-size: 14px;">✨</span>
+            <input type="text" id="urlInput" placeholder="URLを入力するか、検索">
         </div>
+        
+        <div class="menu-container">
+            <div class="nav-icon menu-btn" onclick="toggleMenu(event)" title="設定と管理">⋮</div>
+            <div class="dropdown-menu" id="kebabMenu">
+                <div class="menu-item" onclick="createNewTab()">新しいタブを開く</div>
+                <div class="menu-item" onclick="openInAboutBlank()">about:blank</div>
+                <div class="menu-item" onclick="panicToGoogle()">プライベートモードオフ</div>
+                <div class="menu-item" onclick="openSettings()">設定</div>
+            </div>
+        </div>
+        <button id="searchButton" style="display:none;">Search</button>
     </div>
 
     <div class="loader-container">
@@ -330,8 +422,8 @@
                 <span class="search-icon-home">🔍</span>
                 <input type="text" class="home-search-input" id="homeSearchInput" placeholder="Google で検索または URL を入力">
             </div>
-            <p style="color: var(--text-secondary); margin-top: 30px; font-size: 14px;">
-                シークレット プロキシ モードが有効です
+            <p style="color: var(--text-secondary); margin-top: 30px; font-size: 13px; opacity: 0.6;">
+                Neon Secure Proxy Enabled
             </p>
         </div>
         </main>
@@ -339,7 +431,7 @@
 
 <script>
     /* GITCAT BROWSER CORE LOGIC
-       Ultraviolet (UV) 統合済
+      UVプロキシ処理と完全なUIロジック
     */
     let tabs = [];
     let activeTabId = null;
@@ -352,24 +444,15 @@
     const loaderFill = document.getElementById('loaderFill');
     const homeScreen = document.getElementById('homeScreen');
 
-    // 初期化
-    window.onload = () => {
-        createNewTab();
-    };
+    window.onload = () => { createNewTab(); };
 
-    // 新しいタブを作成
+    // --- タブ管理 ---
     function createNewTab() {
         tabCount++;
         const id = `tab-${tabCount}`;
-        const tabData = {
-            id: id,
-            title: '新しいタブ',
-            url: '',
-            isHome: true
-        };
+        const tabData = { id: id, title: '新しいタブ', url: '', isHome: true };
         tabs.push(tabData);
 
-        // タブボタンの生成
         const tabEl = document.createElement('div');
         tabEl.className = 'tab';
         tabEl.id = `btn-${id}`;
@@ -380,7 +463,6 @@
         tabEl.onclick = () => switchTab(id);
         tabsList.appendChild(tabEl);
 
-        // iframeの生成
         const iframe = document.createElement('iframe');
         iframe.className = 'iframe-window';
         iframe.id = `frame-${id}`;
@@ -388,7 +470,7 @@
 
         iframe.onload = () => {
             finishLoading();
-            if (iframe.src && iframe.src !== "about:blank") {
+            if (iframe.src && iframe.src !== "about:blank" && !iframe.src.endsWith("/setting")) {
                 try {
                     const title = iframe.contentWindow.document.title;
                     if(title) updateTabTitle(id, title);
@@ -397,24 +479,20 @@
         };
 
         switchTab(id);
-        
-        // タブが増えたらスクロール
         tabsList.scrollLeft = tabsList.scrollWidth;
+        closeMenu(); // メニューが開いていれば閉じる
     }
 
-    // タブを切り替える
     function switchTab(id) {
         activeTabId = id;
         const currentTab = tabs.find(t => t.id === id);
 
-        // UI切り替え
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.iframe-window').forEach(f => f.classList.remove('active'));
 
         document.getElementById(`btn-${id}`).classList.add('active');
         document.getElementById(`frame-${id}`).classList.add('active');
 
-        // ホームスクリーンの表示制御
         if (currentTab.isHome) {
             homeScreen.classList.remove('hidden');
             urlInput.value = "";
@@ -424,14 +502,9 @@
         }
     }
 
-    // タブを閉じる
     function closeTab(event, id) {
         event.stopPropagation();
-        if (tabs.length === 1) {
-            // 最後のタブならURLをクリアしてホームへ
-            goHome();
-            return;
-        }
+        if (tabs.length === 1) { goHome(); return; }
 
         const index = tabs.findIndex(t => t.id === id);
         tabs = tabs.filter(t => t.id !== id);
@@ -444,37 +517,6 @@
         }
     }
 
-    // プロキシ実行メインロジック (UV処理系)
-    function processNavigation(inputUrl) {
-        let url = inputUrl.trim();
-        if (!url) return;
-
-        startLoading();
-
-        // 検索 or URL 判定
-        let searchUrl = "https://www.google.com/search?q=";
-        if (!url.includes(".")) {
-            url = searchUrl + encodeURIComponent(url);
-        } else {
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                url = "https://" + url;
-            }
-        }
-
-        const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
-        const currentFrame = document.getElementById(`frame-${activeTabId}`);
-        const currentTab = tabs.find(t => t.id === activeTabId);
-
-        // 状態更新
-        currentTab.url = url;
-        currentTab.isHome = false;
-        
-        // UI更新
-        homeScreen.classList.add('hidden');
-        urlInput.value = url;
-        currentFrame.src = encodedUrl;
-    }
-
     function updateTabTitle(id, title) {
         const tab = tabs.find(t => t.id === id);
         if (tab) {
@@ -484,7 +526,109 @@
         }
     }
 
-    // ローディングアニメーション
+    // --- プロキシ ナビゲーション処理 (UVロジック完全維持) ---
+    function processNavigation(inputUrl) {
+        let url = inputUrl.trim();
+        if (!url) return;
+
+        startLoading();
+
+        let searchUrl = "https://www.google.com/search?q=";
+        if (!url.includes(".")) {
+            url = searchUrl + encodeURIComponent(url);
+        } else {
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                url = "https://" + url;
+            }
+        }
+
+        // UV Configによるエンコード処理
+        const encodedUrl = __uv$config.prefix + __uv$config.encodeUrl(url);
+        const currentFrame = document.getElementById(`frame-${activeTabId}`);
+        const currentTab = tabs.find(t => t.id === activeTabId);
+
+        currentTab.url = url;
+        currentTab.isHome = false;
+        
+        homeScreen.classList.add('hidden');
+        urlInput.value = url;
+        currentFrame.src = encodedUrl;
+    }
+
+    // --- メニュー機能実装 ---
+
+    function toggleMenu(event) {
+        event.stopPropagation();
+        document.getElementById('kebabMenu').classList.toggle('show');
+    }
+
+    function closeMenu() {
+        const menu = document.getElementById('kebabMenu');
+        if (menu.classList.contains('show')) menu.classList.remove('show');
+    }
+
+    // 画面外クリックでメニューを閉じる
+    window.onclick = function(event) {
+        if (!event.target.matches('.menu-btn')) closeMenu();
+    }
+
+    // 1. about:blank 機能 (サイトのURLを自動読み取りabout:blankにフルスクリーン埋め込み)
+    function openInAboutBlank() {
+        const currentFrame = document.getElementById(`frame-${activeTabId}`);
+        
+        // ホーム画面や設定画面、まだ何も読み込んでいない場合は弾く
+        if (!currentFrame || !currentFrame.src || currentFrame.src === "about:blank" || currentFrame.src.endsWith("/setting")) {
+            alert("ウェブサイトを開いてから実行してください。");
+            closeMenu();
+            return;
+        }
+
+        const win = window.open('about:blank', '_blank');
+        if (!win) {
+            alert("ポップアップがブロックされました。ブラウザの設定で許可してください。");
+            return;
+        }
+
+        // about:blank内にiframeを展開し、現在のプロキシURLをそのまま引き継ぐ
+        const iframe = win.document.createElement('iframe');
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+        iframe.style.margin = '0';
+        iframe.src = currentFrame.src; // 既にエンコードされたUVプロキシURLを渡す
+        
+        win.document.body.style.margin = '0';
+        win.document.body.appendChild(iframe);
+        closeMenu();
+    }
+
+    // 2. プライベートモードオフ (緊急リダイレクト)
+    function panicToGoogle() {
+        window.location.href = 'https://www.google.com';
+    }
+
+    // 3. 設定画面の埋め込み
+    function openSettings() {
+        const currentFrame = document.getElementById(`frame-${activeTabId}`);
+        const currentTab = tabs.find(t => t.id === activeTabId);
+        
+        startLoading();
+
+        currentTab.isHome = false;
+        currentTab.url = "gitcat://settings"; // 指定された表示URL
+        currentTab.title = "設定";
+        
+        homeScreen.classList.add('hidden');
+        urlInput.value = "gitcat://settings";
+        
+        // ページ内に /setting を埋め込む
+        currentFrame.src = "/setting"; 
+        
+        updateTabTitle(activeTabId, "設定");
+        closeMenu();
+    }
+
+    // --- UI コントロール ---
     function startLoading() {
         loaderFill.style.transition = "width 0.4s ease";
         loaderFill.style.width = "40%";
@@ -499,7 +643,6 @@
         }, 400);
     }
 
-    // コントロール関数
     function reloadTab() {
         const currentTab = tabs.find(t => t.id === activeTabId);
         if (!currentTab.isHome) {
@@ -521,23 +664,24 @@
         homeScreen.classList.remove('hidden');
     }
 
-    // イベントリスナー登録
+    // --- イベントリスナー ---
     document.getElementById('addTabBtn').onclick = createNewTab;
 
-    // メインアドレスバー
     urlInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") processNavigation(urlInput.value);
     });
 
-    // ホーム画面の巨大検索バー
     homeSearchInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") processNavigation(homeSearchInput.value);
+        if (e.key === "Enter") {
+            processNavigation(homeSearchInput.value);
+            homeSearchInput.value = ""; // 検索後は入力をクリア
+        }
     });
 
-    // 以前のロジック用ダミー（searchButton）
-    const searchButton = document.getElementById("searchButton");
-    if(searchButton) {
-        searchButton.onclick = (e) => {
+    // 元のボタンロジックの互換性維持
+    const searchBtn = document.getElementById("searchButton");
+    if(searchBtn) {
+        searchBtn.onclick = (e) => {
             e.preventDefault();
             processNavigation(urlInput.value);
         };
