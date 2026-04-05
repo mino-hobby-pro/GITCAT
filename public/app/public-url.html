@@ -3,154 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Public Domains | GITCAT</title>
+    <title>Public Domain List | GITCAT</title>
     <style>
         :root {
-            --bg-dark: #0a0a0c;
-            --card-bg: #111114;
-            --text-primary: #e4e4e7;
-            --text-secondary: #71717a;
-            --border: rgba(255, 255, 255, 0.05);
-            --neon-rainbow: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #f43f5e, #eab308, #14b8a6, #6366f1);
-            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --bg: #f9fafb;
+            --surface: #ffffff;
+            --text-main: #111827;
+            --text-sub: #6b7280;
+            --accent: #2563eb;
+            --border: #e5e7eb;
+            --font: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            margin: 0;
-            padding: 40px 20px;
-            font-family: var(--font-family);
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
-            position: relative;
+            margin: 0; padding: 0; background: var(--bg); color: var(--text-main); font-family: var(--font);
+            line-height: 1.5; -webkit-font-smoothing: antialiased;
         }
 
-        /* ノイズエフェクト継承 */
-        .noise-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.035;
-            background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-            animation: noiseAnim 0.15s infinite;
+        .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 36px; font-weight: 800; color: var(--text-main); margin: 0 0 10px; letter-spacing: -0.025em; }
+        p.subtitle { color: var(--text-sub); font-size: 16px; }
+
+        /* コントロールエリア */
+        .controls {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+            padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 40px;
+            display: flex; flex-direction: column; gap: 20px;
         }
 
-        @keyframes noiseAnim {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(-1px, 1px); }
-            40% { transform: translate(1px, -1px); }
-            60% { transform: translate(-1px, -1px); }
-            80% { transform: translate(1px, 1px); }
-            100% { transform: translate(0, 0); }
+        .search-box { position: relative; }
+        .search-box input {
+            width: 100%; background: #f3f4f6; border: 1px solid transparent; border-radius: 10px;
+            padding: 12px 16px 12px 40px; font-size: 15px; transition: 0.2s;
         }
+        .search-box input:focus { background: #fff; border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-sub); pointer-events: none; }
 
-        @keyframes rainbowFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .filters { display: flex; gap: 8px; flex-wrap: wrap; }
+        .filter-chip {
+            background: #f3f4f6; border: none; padding: 8px 16px; border-radius: 99px;
+            font-size: 13px; font-weight: 600; color: var(--text-sub); cursor: pointer; transition: 0.2s;
         }
+        .filter-chip.active { background: var(--text-main); color: #fff; }
+        .filter-chip:hover:not(.active) { background: #e5e7eb; color: var(--text-main); }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
+        /* リスト表示 */
+        .domain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .domain-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between;
         }
+        .domain-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-color: #d1d5db; }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 30px;
-            text-align: center;
-            background: var(--neon-rainbow);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rainbowFlow 6s ease infinite;
+        .domain-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .server-badge {
+            font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 2px 8px;
+            border-radius: 4px; letter-spacing: 0.05em;
         }
+        .badge-vercel { background: #000; color: #fff; }
+        .badge-render { background: #46e3b7; color: #000; }
+        .badge-unknown { background: #f3f4f6; color: var(--text-sub); }
 
-        .description {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 40px;
-        }
+        .domain-url { font-weight: 700; color: var(--text-main); text-decoration: none; word-break: break-all; margin-bottom: 8px; font-size: 15px; }
+        .domain-url:hover { color: var(--accent); }
+        .domain-meta { font-size: 12px; color: var(--text-sub); }
 
-        .url-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .url-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .url-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 2px;
-            background: var(--neon-rainbow);
-            background-size: 300% 300%;
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .url-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(168, 85, 247, 0.3);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-        }
-        .url-card:hover::before {
-            opacity: 1;
-            animation: rainbowFlow 3s linear infinite;
-        }
-
-        .url-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            word-break: break-all;
-        }
-        .url-link:hover { color: #a855f7; }
-
-        .url-date {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-
-        .loading-text {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-top: 50px;
-        }
+        .empty-state { text-align: center; padding: 60px 0; color: var(--text-sub); font-size: 15px; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
 
-<div class="noise-overlay"></div>
-
 <div class="container">
-    <h1>Public Domains</h1>
-    <p class="description">GITCATが展開されているパブリックドメイン（代替URL）の一覧です。</p>
-    
-    <div id="loading" class="loading-text">Firebaseからドメインリストを取得中...</div>
-    <div class="url-list" id="urlList"></div>
+    <header>
+        <h1>Public Domains</h1>
+        <p class="subtitle">GITCAT の公式・コミュニティ配布URL一覧</p>
+    </header>
+
+    <div class="controls">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="ドメインを検索...">
+        </div>
+        <div class="filters" id="filterContainer">
+            <button class="filter-chip active" data-filter="all">すべて</button>
+            <button class="filter-chip" data-filter="vercel">Vercel</button>
+            <button class="filter-chip" data-filter="render">Render</button>
+            <button class="filter-chip" data-filter="unknown">サーバー不明</button>
+        </div>
+    </div>
+
+    <div class="domain-grid" id="domainGrid">
+        <div class="empty-state">データを読み込み中...</div>
+    </div>
 </div>
 
 <script type="module">
@@ -169,37 +115,73 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-  const dbRef = ref(db);
-  const listContainer = document.getElementById('urlList');
-  const loading = document.getElementById('loading');
+  let allDomains = [];
+  let currentFilter = 'all';
 
-  get(child(dbRef, `public_domains`)).then((snapshot) => {
-    loading.style.display = 'none';
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      Object.keys(data).forEach(key => {
-          const item = data[key];
-          
-          const card = document.createElement('div');
-          card.className = 'url-card';
-          
-          const date = new Date(item.timestamp).toLocaleDateString('ja-JP', { 
-              year: 'numeric', month: 'short', day: 'numeric' 
-          });
-
-          card.innerHTML = `
-              <a href="${item.url}" target="_blank" class="url-link">${item.url}</a>
-              <span class="url-date">登録日: ${date}</span>
-          `;
-          listContainer.appendChild(card);
-      });
-    } else {
-      listContainer.innerHTML = '<p style="color:var(--text-secondary); text-align:center; width:100%;">登録されているドメインはありません。</p>';
+  async function fetchDomains() {
+    const dbRef = ref(db);
+    try {
+        const snapshot = await get(child(dbRef, 'public_domains'));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            allDomains = Object.values(data).map(item => ({
+                ...item,
+                server: detectServer(item.url)
+            }));
+            renderList();
+        } else {
+            document.getElementById('domainGrid').innerHTML = '<div class="empty-state">登録されたドメインはありません。</div>';
+        }
+    } catch (e) {
+        console.error(e);
+        document.getElementById('domainGrid').innerHTML = '<div class="empty-state">エラーが発生しました。</div>';
     }
-  }).catch((error) => {
-    loading.innerText = "読み込みエラーが発生しました。";
-    console.error("Firebase err:", error);
+  }
+
+  function detectServer(url) {
+      if (url.includes('vercel.app')) return 'vercel';
+      if (url.includes('onrender.com')) return 'render';
+      return 'unknown';
+  }
+
+  function renderList() {
+      const grid = document.getElementById('domainGrid');
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      
+      const filtered = allDomains.filter(d => {
+          const matchSearch = d.url.toLowerCase().includes(search);
+          const matchFilter = currentFilter === 'all' || d.server === currentFilter;
+          return matchSearch && matchFilter;
+      });
+
+      if (filtered.length === 0) {
+          grid.innerHTML = '<div class="empty-state">該当するドメインが見つかりません。</div>';
+          return;
+      }
+
+      grid.innerHTML = filtered.map(d => `
+          <div class="domain-card">
+              <div class="domain-header">
+                  <span class="server-badge badge-${d.server}">${d.server === 'unknown' ? '不明' : d.server}</span>
+              </div>
+              <a href="${d.url}" class="domain-url" target="_blank">${d.url.replace(/^https?:\/\//, '')}</a>
+              <div class="domain-meta">登録: ${new Date(d.timestamp).toLocaleDateString()}</div>
+          </div>
+      `).join('');
+  }
+
+  // イベント
+  document.getElementById('searchInput').addEventListener('input', renderList);
+  document.getElementById('filterContainer').addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-chip')) {
+          document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+          e.target.classList.add('active');
+          currentFilter = e.target.dataset.filter;
+          renderList();
+      }
   });
+
+  fetchDomains();
 </script>
 
 </body>
