@@ -43,6 +43,10 @@ app.get('/labo5', (req, res) => {
     res.sendFile(path.join(process.cwd(), '/public/app/labo5.html'));
 });
 
+app.get('/public-url', (req, res) => {
+    res.sendFile(path.join(process.cwd(), '/public/app/public-url.html'));
+});
+
 
 /* add your own extra urls like this:
 
