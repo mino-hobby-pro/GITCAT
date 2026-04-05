@@ -43,7 +43,7 @@ app.get('/labo5', (req, res) => {
     res.sendFile(path.join(process.cwd(), '/public/app/labo5.html'));
 });
 
-app.get('/public-url', (req, res) => {
+app.get('/public-url.html', (req, res) => {
     res.sendFile(path.join(process.cwd(), '/public/app/public-url.html'));
 });
 
