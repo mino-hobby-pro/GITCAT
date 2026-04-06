@@ -32,7 +32,55 @@ server.on('upgrade', (req, socket, head) => {
 })
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(process.cwd(), '/public/index.html'));
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="ja">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Loading...</title>
+            <style>
+                body {
+                    background-color: #0f0f0f;
+                    color: white;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                }
+                .loader {
+                    border: 4px solid #333;
+                    border-top: 4px solid #3498db;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    animation: spin 1s linear infinite;
+                    margin-bottom: 20px;
+                }
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                .text {
+                    font-size: 1.2rem;
+                    letter-spacing: 2px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="loader"></div>
+            <div class="text">読み込み中...</div>
+            <script>
+                setTimeout(() => {
+                    window.location.href = '/index';
+                }, 3000);
+            </script>
+        </body>
+        </html>
+    `);
 });
 
 app.get('/index', (req, res) => {
