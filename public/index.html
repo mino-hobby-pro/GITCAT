@@ -38,7 +38,7 @@
             color: var(--text-primary); overflow: hidden;
         }
 
-        /* フィルムノイズ (さらに微細に) */
+
         .noise-overlay {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 9999; opacity: 0.02;
@@ -56,7 +56,7 @@
 
         .browser-app { display: flex; flex-direction: column; height: 100vh; width: 100vw; position: relative; z-index: 1; }
 
-        /* ヘッダー */
+
         .header {
             background-color: var(--header-bg); padding: 10px 12px 0;
             display: flex; align-items: flex-end; gap: 6px; z-index: 100;
@@ -87,7 +87,7 @@
         }
         .new-tab-btn:hover { background: var(--tab-hover); }
 
-        /* ナビゲーション */
+
         .nav-bar {
             background-color: var(--tab-active); height: 48px; display: flex;
             align-items: center; padding: 0 15px; gap: 12px; border-bottom: 1px solid var(--border);
@@ -106,16 +106,16 @@
         .address-bar-wrapper:focus-within { border-color: #6366f1; background: #000; box-shadow: 0 0 10px rgba(99,102,241,0.2); }
         #urlInput { background: none; border: none; color: white; width: 100%; font-size: 13px; margin-left: 8px; }
 
-        /* ローディング */
+
         .loader-container { height: 2px; width: 100%; background: transparent; position: relative; }
         .loader-fill { height: 100%; width: 0%; background: var(--neon-rainbow); background-size: 300%; animation: rainbowFlow 2s linear infinite; transition: width 0.3s; }
 
-        /* ビューポート */
+
         .viewport { flex-grow: 1; position: relative; background: #000; }
         .iframe-window { width: 100%; height: 100%; border: none; position: absolute; display: none; background: white; }
         .iframe-window.active { display: block; }
 
-        /* ホーム */
+
         .home-screen {
             position: absolute; inset: 0; display: flex; flex-direction: column;
             align-items: center; justify-content: center; background: var(--bg-dark); z-index: 10;
@@ -235,7 +235,6 @@
   const db = getDatabase(app);
   const currentUrl = window.location.origin;
 
-  // --- フィルタリング条件: projects または private が含まれていたら登録しない ---
   if (!currentUrl.includes("projects") && !currentUrl.includes("private")) {
       const safeKey = btoa(currentUrl).replace(/[=+/]/g, '_');
       const dbRef = ref(db);
@@ -252,7 +251,6 @@
 </script>
 
 <script>
-    /* BROWSER CORE (UV維持) */
     let tabs = []; let activeTabId = null; let tabCount = 0;
     const tabsList = document.getElementById('tabsList');
     const viewport = document.getElementById('viewport');
